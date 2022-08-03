@@ -101,6 +101,10 @@ function SideMenu(props) {
     })
   }
 
+  // console.log(props.location);
+
+  const selectKeys = [props.location.pathname]
+  const openKeys = ["/" +  props.location.pathname.split("/")[1]]
   return (
     <Sider trigger={null} collapsible collapsed={false}>
       <div style={{ display: "flex", height: "100%", "flexDirection": "column" }}>
@@ -109,7 +113,9 @@ function SideMenu(props) {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={['/home']}>
+            defaultSelectedKeys={selectKeys} 
+            className = "aaaaaa"
+            defaultOpenKeys={openKeys}>
             {renderMenu(menu)}
           </Menu>
         </div>
