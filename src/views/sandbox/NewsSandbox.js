@@ -19,15 +19,16 @@ export default function NewsSandbox() {
       <SideMenu></SideMenu>
       <Layout className="site-layout">
         <TopHeader></TopHeader>
+        
         <Content
           className="site-layout-background"
           style={{
             margin: '24px 16px',
             padding: 24,
             minHeight: 280,
-          }}
-        >
-          Content
+          }}>
+        
+          
           <Switch>
             <Route path="/home" component={Home} />
             <Route path="/user-manage/list" component={UserList} />
