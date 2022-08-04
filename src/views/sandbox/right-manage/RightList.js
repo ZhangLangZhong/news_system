@@ -1,7 +1,8 @@
 import React, { useState,useEffect } from 'react'
-import {Table,Tag,Button,Modal} from 'antd'
+import {Table,Tag,Button,Modal,Popover,Switch} from 'antd'
 import axios from 'axios'
 import { EditOutlined ,DeleteOutlined,ExclamationCircleOutlined} from  '@ant-design/icons'
+// import { Switch } from 'react-router-dom';
 export default function RightList() {
 
   const {confirm} = Modal;
@@ -63,11 +64,35 @@ export default function RightList() {
           <Button danger shape="circle" icon={<DeleteOutlined />} 
            onClick={()=>confirmMethod(item)}/>&nbsp;&nbsp;&nbsp;
 
-          <Button type="primary" shape="circle" icon={<EditOutlined />} />
+          <Popover content={<div style={{textAlign:"center"}}>
+            <Switch defaultChecked={item.pagepermisson} onChange={()=>switchMethod(item)}></Switch>
+            </div>} title="页面配置项" trigger={item.pagepermisson === undefined ?'':'click'}>
+            <Button type="primary" shape="circle" icon={<EditOutlined />} disabled ={item.pagepermisson === undefined}/>
+          </Popover>
+
         </div>
       }
     },
   ];
+
+
+  //用户列表按钮点击的事件 
+  const switchMethod = (item)=>{
+    item.pagepermisson = item.pagepermisson === 1?0:1
+    // console.log(item);
+    // 强行更新的方法
+    setDataSource([...dataSource])
+
+    if(item.grade === 1){
+      axios.patch(`http://localhost:5000/rights/${item.id}`,{
+        pagepermisson:item.pagepermisson
+      })
+    }else{
+      axios.patch(`http://localhost:5000/children/${item.id}`,{
+        pagepermisson:item.pagepermisson
+      })
+    }
+  }
 
   const confirmMethod = (item)=>{
     confirm({
@@ -100,7 +125,7 @@ export default function RightList() {
       list[0].children = list[0].children.filter(data=>data.id !== item.id)
       // console.log(list,dataSource);
       setDataSource([...dataSource])
-      axios.delete(`http://localhost:5000/rights/${item.id}`)
+      axios.delete(`http://localhost:5000/children/${item.id}`)
     }
 
     // 同步后端
