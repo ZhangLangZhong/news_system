@@ -3,35 +3,35 @@ import { Layout,Dropdown,Menu,Avatar } from 'antd';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-   SmileOutlined,
+  //  SmileOutlined,
    UserOutlined
 } from '@ant-design/icons';
+import { withRouter } from 'react-router-dom';
 const { Header } = Layout;
 
-export default function TopHeader() {
+function TopHeader(props) {
   const [collapsed, setCollapsed] = useState(false)
   const changeCollapsed = () => {
     setCollapsed(!collapsed)
   }
+
+
+  const {role:{roleName},username} = JSON.parse(localStorage.getItem("token"))
+
   const menu = (
-    <Menu
-      items={[
-        {
-          key: '1',
-          label: (
-            "超级管理员"
-          ),
-          icon: <SmileOutlined />,
-        },
-       
-        {
-          key: '4',
-          danger: true,
-          label: '退出',
-        },
-      ]}
-    />
-  );
+    <Menu>
+      <Menu.Item key="1">
+          {roleName}
+      </Menu.Item>
+      <Menu.Item key="2" danger onClick={()=>{
+        localStorage.removeItem("token")
+        // console.log(props.history);
+        props.history.replace("/login")
+      }}>
+        退出
+      </Menu.Item>
+    </Menu>
+  )
 
   return (
     <Header className="site-layout-background" style={{ padding: '0 16px' }}>
@@ -40,7 +40,7 @@ export default function TopHeader() {
         collapsed ? <MenuUnfoldOutlined onClick={changeCollapsed} /> : <MenuFoldOutlined onClick={changeCollapsed} />
       }
       <div style={{ float: "right" }}>
-        <span>欢迎admin回来</span>
+        <span>欢迎{username}回来</span>
         <Dropdown overlay={menu}>
           
             <Avatar size="large" icon={<UserOutlined/>}/>
@@ -51,3 +51,5 @@ export default function TopHeader() {
     </Header>
   )
 }
+
+export default withRouter(TopHeader)
